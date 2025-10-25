@@ -1,13 +1,22 @@
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 void main() {
-    //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
-    // to see how IntelliJ IDEA suggests fixing it.
-    IO.println(String.format("Hello and welcome!"));
+    Thread mainthread = new Thread(new MainThread());
+    mainthread.setName("Main thread");
 
-    for (int i = 1; i <= 5; i++) {
-        //TIP Press <shortcut actionId="Debug"/> to start debugging your code. We have set one <icon src="AllIcons.Debugger.Db_set_breakpoint"/> breakpoint
-        // for you, but you can always add more by pressing <shortcut actionId="ToggleLineBreakpoint"/>.
-        IO.println("i = " + i);
-    }
+    Thread secondThread = new Thread(new SecondThread());
+    secondThread.setName("Second thread");
+    secondThread.setPriority(Thread.MAX_PRIORITY);
+
+    System.out.println(secondThread.getName());
+    System.out.println(secondThread.getPriority());
+
+    mainthread.start();
+
+    mainthread.setUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
+        public void uncaughtException(Thread t, Throwable e) {
+            System.out.println("Uncaught exception in thread " + t.getName());
+        }
+    });
+    secondThread.start();
 }
